@@ -246,6 +246,18 @@ void ImplictEulerMethod(double (*f)(double*, double, int), int n, double tMax, d
 	double* b = new double[n] {0.0}; 
 	double* p = new double[n] {0.0};
 
+	//const int n = 2;
+	//const int m = 4;
+	//const double t0 = 0.0;
+	//const double tMax = 7.0;
+	//const double tau = 0.01;
+	//double t = t0;
+	//double y[n] = { 1.0, 3.0 };
+	//double yy[n] = { 0.0 };
+	//double tn, tk, deltat;
+	//double deltah = 0.001, opred, opredn[n] = { 0.0 };
+	//double a[n][n] = { 0.0 }, b[n] = { 0.0 }, p[n] = { 0.0 };
+
 	tn = omp_get_wtime();
 	for (double t = t0; t < tMax; t += tau)
 	{
