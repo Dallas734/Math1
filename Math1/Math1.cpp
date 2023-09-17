@@ -270,7 +270,7 @@ void ImplictEulerMethod(double (*f)(double*, double, int), int n, double tMax, d
 		{
 			for (int j = 0; j < n; j++)
 			{
-				memcpy(yy, y, sizeof(y));
+				memcpy(yy, y, sizeof(y) * n);
 				yy[j] += deltah;
 				a[i][j] = (f(yy, t, i) - f(y, t, i)) / deltah;
 			}
