@@ -4,17 +4,6 @@
 #include <cmath>
 #include <omp.h>
 
-double f(double* y, double t, int i)
-{
-	double w;
-
-	switch (i)
-	{
-	case 0: return w = 2 * (y[0] - y[0] * y[1]); break;
-	case 1: return w = -(y[1] - y[0] * y[1]); break;
-	}
-}
-
 double F1(double* y, double t)
 {
 	return 2 * (y[0] - y[0] * y[1]);
