@@ -162,7 +162,6 @@ void RK4(double (*f)(double*, double, int), int n, double tMax, double yc[])
 {
 	setlocale(LC_ALL, "Russian");
 
-	const int m = 4;
 	const double t0 = 0.0;
 	const double tau = 0.01;
 	double t = t0;
@@ -239,7 +238,6 @@ void ImplictEulerMethod(double (*f)(double*, double, int), int n, double tMax, d
 {
 	setlocale(LC_ALL, "Russian");
 
-	const int m = 4;
 	const double t0 = 0.0;
 	const double tau = 0.01;
 	double t = t0;
