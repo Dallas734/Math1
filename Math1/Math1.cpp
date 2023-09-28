@@ -31,7 +31,7 @@ double (*p[n])(double*, double) = { F1, F2 };
 const double tMax = 7.0;
 double y[n] = { 1.0, 3.0 };
 
-void EulerMethod(double (*f)(double*, double, int), int n, double tMax, double* yc)
+void EulerMethod(double (*f[])(double*, double), int n, double tMax, double* yc)
 {
 	setlocale(LC_ALL, "Russian");
 
@@ -49,7 +49,7 @@ void EulerMethod(double (*f)(double*, double, int), int n, double tMax, double* 
 	{
 		for (int i = 0; i < n; ++i)
 		{
-			yy[i] = y[i] + tau * f(y, t, i);
+			yy[i] = y[i] + tau * f[i](y, t);
 		}
 
 		for (int i = 0; i < n; ++i)
@@ -70,7 +70,7 @@ void EulerMethod(double (*f)(double*, double, int), int n, double tMax, double* 
 	}
 }
 
-void RK2(double (*f)(double*, double, int), int n, double tMax, double yc[])
+void RK2(double (*f[])(double*, double), int n, double tMax, double yc[])
 {
 	setlocale(LC_ALL, "Russian");
 
@@ -88,12 +88,12 @@ void RK2(double (*f)(double*, double, int), int n, double tMax, double yc[])
 	{
 		for (int i = 0; i < n; i++)
 		{
-			yy[i] = y[i] + 0.5 * tau * f(y, t, i);
+			yy[i] = y[i] + 0.5 * tau * f[i](y, t);
 		}
 
 		for (int i = 0; i < n; i++)
 		{
-			ff[i] = f(yy, t + 0.5 * tau, i);
+			ff[i] = f[i](yy, t + 0.5 * tau);
 		}
 
 		for (int i = 0; i < n; i++)
@@ -115,7 +115,7 @@ void RK2(double (*f)(double*, double, int), int n, double tMax, double yc[])
 	}
 }
 
-void Correction(double (*f)(double*, double, int), int n, double tMax, double yc[])
+void Correction(double (*f[])(double*, double), int n, double tMax, double yc[])
 {
 	setlocale(LC_ALL, "Russian");
 
@@ -133,12 +133,12 @@ void Correction(double (*f)(double*, double, int), int n, double tMax, double yc
 	{
 		for (int i = 0; i < n; i++)
 		{
-			yy[i] = y[i] + tau * f(y, t, i);
+			yy[i] = y[i] + tau * f[i](y, t);
 		}
 
 		for (int i = 0; i < n; i++)
 		{
-			ff[i] = y[i] + tau * (f(yy, t + tau, i) + f(y, t, i)) / 2.0;
+			ff[i] = y[i] + tau * (f[i](yy, t + tau) + f[i](y, t)) / 2.0;
 		}
 
 		for (int i = 0; i < n; i++)
@@ -159,7 +159,7 @@ void Correction(double (*f)(double*, double, int), int n, double tMax, double yc
 	}
 }
 
-void RK4(double (*f)(double*, double, int), int n, double tMax, double yc[])
+void RK4(double (*f[])(double*, double), int n, double tMax, double yc[])
 {
 	setlocale(LC_ALL, "Russian");
 
@@ -182,7 +182,7 @@ void RK4(double (*f)(double*, double, int), int n, double tMax, double yc[])
 	{
 		for (int i = 0; i < n; i++)
 		{
-			R[0][i] = tau * f(y, t, i);
+			R[0][i] = tau * f[i](y, t);
 		}
 
 		for (int i = 0; i < n; i++)
@@ -192,7 +192,7 @@ void RK4(double (*f)(double*, double, int), int n, double tMax, double yc[])
 
 		for (int i = 0; i < n; i++)
 		{
-			R[1][i] = tau * f(yy, t + 0.5 * tau, i);
+			R[1][i] = tau * f[i](yy, t + 0.5 * tau);
 			
 		}
 
@@ -203,7 +203,7 @@ void RK4(double (*f)(double*, double, int), int n, double tMax, double yc[])
 
 		for (int i = 0; i < n; i++)
 		{
-			R[2][i] = tau * f(yy, t + 0.5 * tau, i);
+			R[2][i] = tau * f[i](yy, t + 0.5 * tau);
 			yy[i] = y[i] + R[2][i];
 		}
 
@@ -214,7 +214,7 @@ void RK4(double (*f)(double*, double, int), int n, double tMax, double yc[])
 
 		for (int i = 0; i < n; i++)
 		{
-			R[3][i] = tau * f(yy, t + tau, i);
+			R[3][i] = tau * f[i](yy, t + tau);
 		}
 
 		for (int i = 0; i < n; i++)
@@ -235,7 +235,7 @@ void RK4(double (*f)(double*, double, int), int n, double tMax, double yc[])
 	}
 }
 
-void ImplictEulerMethod(double (*f)(double*, double, int), int n, double tMax, double yc[])
+void ImplictEulerMethod(double (*f[])(double*, double), int n, double tMax, double yc[])
 {
 	setlocale(LC_ALL, "Russian");
 
@@ -273,7 +273,7 @@ void ImplictEulerMethod(double (*f)(double*, double, int), int n, double tMax, d
 	{
 		for (int i = 0; i < n; i++)
 		{
-			b[i] = -f(y, t, i);
+			b[i] = -f[i](y, t);
 		}
 
 		for (int i = 0; i < n; i++)
@@ -282,7 +282,7 @@ void ImplictEulerMethod(double (*f)(double*, double, int), int n, double tMax, d
 			{
 				memcpy(yy, y, sizeof(y) * n);
 				yy[j] += deltah;
-				a[i][j] = (f(yy, t, i) - f(y, t, i)) / deltah;
+				a[i][j] = (f[i](yy, t) - f[i](y, t)) / deltah;
 			}
 		}
 
@@ -324,9 +324,9 @@ void ImplictEulerMethod(double (*f)(double*, double, int), int n, double tMax, d
 
 int main()
 {
-	EulerMethod(f, n, tMax, y);
-	RK2(f, n, tMax, y);
-	Correction(f, n, tMax, y);
-	RK4(f, n, tMax, y);
-	ImplictEulerMethod(f, n, tMax, y);
+	EulerMethod(p, n, tMax, y);
+	RK2(p, n, tMax, y);
+	Correction(p, n, tMax, y);
+	RK4(p, n, tMax, y);
+	ImplictEulerMethod(p, n, tMax, y);
 }
