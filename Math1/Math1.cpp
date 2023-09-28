@@ -27,6 +27,7 @@ double F2(double* y, double t)
 
 const int n = 2;
 const int m = 4;
+double (*p[n])(double*, double) = { F1, F2 };
 const double tMax = 7.0;
 double y[n] = { 1.0, 3.0 };
 
