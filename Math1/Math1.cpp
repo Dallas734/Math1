@@ -15,7 +15,18 @@ double f(double* y, double t, int i)
 	}
 }
 
+double F1(double* y, double t)
+{
+	return 2 * (y[0] - y[0] * y[1]);
+}
+
+double F2(double* y, double t)
+{
+	return -(y[1] - y[0] * y[1]);
+}
+
 const int n = 2;
+const int m = 4;
 const double tMax = 7.0;
 double y[n] = { 1.0, 3.0 };
 
