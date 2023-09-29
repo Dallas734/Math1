@@ -4,7 +4,7 @@
 #include <cmath>
 #include <omp.h>
 
-double F1(double* y, double t)
+double F1(double* y, double t) 
 {
 	return 2 * (y[0] - y[0] * y[1]);
 }
@@ -16,15 +16,15 @@ double F2(double* y, double t)
 
 const int n = 2;
 double (*p[n])(double*, double) = { F1, F2 };
-const double tMax = 7.0;
+const double tMax = 10.0;
 double y[n] = { 1.0, 3.0 };
+const double tau = 0.01;
+const double t0 = 0.0;
 
-void EulerMethod(double (*f[])(double*, double), int n, double tMax, double* yc)
+void EulerMethod(double (*f[])(double*, double), int n, double tMax, double* yc, double tau, double t0)
 {
 	setlocale(LC_ALL, "Russian");
 
-	const double t0 = 0.0;
-	const double tau = 0.01;
 	double t = t0;
 	double* y = new double[n] {0.0};
 	memcpy(y, yc, n * sizeof yc);
@@ -58,12 +58,10 @@ void EulerMethod(double (*f[])(double*, double), int n, double tMax, double* yc)
 	}
 }
 
-void RK2(double (*f[])(double*, double), int n, double tMax, double yc[])
+void RK2(double (*f[])(double*, double), int n, double tMax, double yc[], double tau, double t0)
 {
 	setlocale(LC_ALL, "Russian");
 
-	const double t0 = 0.0;
-	const double tau = 0.01;
 	double t = t0;
 	double* y = new double[n] {0.0};
 	memcpy(y, yc, n * sizeof yc);
@@ -103,12 +101,10 @@ void RK2(double (*f[])(double*, double), int n, double tMax, double yc[])
 	}
 }
 
-void Correction(double (*f[])(double*, double), int n, double tMax, double yc[])
+void Correction(double (*f[])(double*, double), int n, double tMax, double yc[], double tau, double t0)
 {
 	setlocale(LC_ALL, "Russian");
 
-	const double t0 = 0.0;
-	const double tau = 0.01;
 	double t = t0;
 	double* y = new double[n] {0.0};
 	memcpy(y, yc, n * sizeof yc);
@@ -147,13 +143,11 @@ void Correction(double (*f[])(double*, double), int n, double tMax, double yc[])
 	}
 }
 
-void RK4(double (*f[])(double*, double), int n, double tMax, double yc[])
+void RK4(double (*f[])(double*, double), int n, double tMax, double yc[], double tau, double t0)
 {
 	setlocale(LC_ALL, "Russian");
 
 	const int m = 4;
-	const double t0 = 0.0;
-	const double tau = 0.01;
 	double t = t0;
 	double* y = new double[n] {0.0};
 	memcpy(y, yc, n * sizeof yc);
@@ -193,7 +187,6 @@ void RK4(double (*f[])(double*, double), int n, double tMax, double yc[])
 		for (int i = 0; i < n; i++)
 		{
 			R[2][i] = tau * f[i](yy, t + 0.5 * tau);
-			yy[i] = y[i] + R[2][i];
 		}
 
 		for (int i = 0; i < n; i++)
@@ -224,12 +217,10 @@ void RK4(double (*f[])(double*, double), int n, double tMax, double yc[])
 	}
 }
 
-void ImplictEulerMethod(double (*f[])(double*, double), int n, double tMax, double yc[])
+void ImplictEulerMethod(double (*f[])(double*, double), int n, double tMax, double yc[], double tau, double t0)
 {
 	setlocale(LC_ALL, "Russian");
 
-	const double t0 = 0.0;
-	const double tau = 0.01;
 	double t = t0;
 	double* y = new double[n] {0.0};
 	memcpy(y, yc, n * sizeof yc);
@@ -259,7 +250,7 @@ void ImplictEulerMethod(double (*f[])(double*, double), int n, double tMax, doub
 			{
 				memcpy(yy, y, sizeof(y) * n);
 				yy[j] += deltah;
-				a[i][j] = (f[i](yy, t) - f[i](y, t)) / deltah;
+				a[i][j] = (f[i](yy, t) + b[i]) / deltah;
 			}
 		}
 
@@ -301,9 +292,9 @@ void ImplictEulerMethod(double (*f[])(double*, double), int n, double tMax, doub
 
 int main()
 {
-	EulerMethod(p, n, tMax, y);
-	RK2(p, n, tMax, y);
-	Correction(p, n, tMax, y);
-	RK4(p, n, tMax, y);
-	ImplictEulerMethod(p, n, tMax, y);
+	EulerMethod(p, n, tMax, y, tau, t0);
+	RK2(p, n, tMax, y, tau, t0);
+	Correction(p, n, tMax, y, tau, t0);
+	RK4(p, n, tMax, y, tau, t0);
+	ImplictEulerMethod(p, n, tMax, y, tau, t0);
 }
