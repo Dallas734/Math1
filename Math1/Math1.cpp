@@ -18,7 +18,7 @@ const int n = 2;
 double (*p[n])(double*, double) = { F1, F2 };
 const double tMax = 10.0;
 double y[n] = { 1.0, 3.0 };
-const double tau = 0.01;
+const double tau = 0.001;
 const double t0 = 0.0;
 
 void EulerMethod(double (*f[])(double*, double), int n, double tMax, double* yc, double tau, double t0)
@@ -226,7 +226,7 @@ void ImplictEulerMethod(double (*f[])(double*, double), int n, double tMax, doub
 	memcpy(y, yc, n * sizeof yc);
 	double* yy = new double[n] {0.0};
 	double tn, tk, deltat;
-	double deltah = 0.001, opred; 
+	double deltah = 0.0001, opred; 
 	double* opredn = new double[n]{ 0.0 };
 	double** a = new double* [n];
 	for (int i = 0; i < n; i++)
