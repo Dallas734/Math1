@@ -16,9 +16,9 @@ double F2(double* y, double t)
 
 const int n = 2;
 double (*p[n])(double*, double) = { F1, F2 };
-const double tMax = 10.0;
+const double tMax = 3.0;
 double y[n] = { 1.0, 3.0 };
-const double tau = 0.001;
+const double tau = 0.01;
 const double t0 = 0.0;
 
 void EulerMethod(double (*f[])(double*, double), int n, double tMax, double* yc, double tau, double t0)
